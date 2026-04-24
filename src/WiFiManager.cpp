@@ -1,28 +1,13 @@
-
+//! WiFiManager.cpp
 #include <Arduino.h>
+#include "WiFiManager.h"
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include "secrets.h"
 
-/*
-autor:fellipe augusto
-mqtt
-data:24/04/2026
-*/
-
-
-
-void conectarWiFi();
-void garantirWiFiConectado();
-
-void setup() 
+bool wifiEstaConectado ()
 {
-  Serial.begin(9600);
-  conectarWiFi();
-}
-
-void loop()
-{
-
+    return WiFi.status() == WL_CONNECTED;
 }
 
 void conectarWiFi()
