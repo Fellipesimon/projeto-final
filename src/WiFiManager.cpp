@@ -4,7 +4,8 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include "secrets.h"
-
+#include <WiFiClient.h>
+#include "DebugManager.h"
 bool wifiEstaConectado ()
 {
     return WiFi.status() == WL_CONNECTED;
@@ -12,9 +13,9 @@ bool wifiEstaConectado ()
 
 void conectarWiFi()
 {
-  Serial.println("===========================");
-  Serial.println("Iniciando conexão WiFi...");
-  Serial.println("===========================");
+  debugInfo("===========================");
+  debugInfo("Iniciando conexão WiFi...");
+  debugInfo("===========================");
 
   // Configura o ESP32 como station, ou seja 
   //ele vai se conectar a um roteador existente.
@@ -23,7 +24,7 @@ void conectarWiFi()
   //inicia a conexão com SSID e senha
   WiFi.begin(WIFI_SSID, WIFI_SENHA);
 
-  Serial.println("conectando");
+  debugInfo("conectando");
 
 int tentativasWiFi = 0;
 const int maxTentativasWiFi = 30;
@@ -32,22 +33,22 @@ const int maxTentativasWiFi = 30;
   while(WiFi.status() != WL_CONNECTED && tentativasWiFi < maxTentativasWiFi)
   {
     delay(500);
-    Serial.print(".");
+    debugInfoSemLinha(".");
     tentativasWiFi++;
   }
 
-  Serial.println();
+  debugInfo(".");
   if(WiFi.status() == WL_CONNECTED)
   {
-    Serial.println("WiFi conectado comsucesso!");
-    Serial.print("Endereço IP: ");
-    Serial.println(WiFi.localIP());
+    debugInfo("WiFi conectado comsucesso!");
+    debugInfo("Endereço IP: ");
+    debugInfo( String(WiFi.localIP()));
   }
 
   else
   {
-    Serial.println("Falha ao conectar noWiFi.");
-    Serial.println("Verifique SSID, senha e sinal de rede.");
+    debugErro("Falha ao conectar noWiFi.");
+    debugErro("Verifique SSID, senha e sinal de rede.");
   }
 }
 
@@ -55,12 +56,12 @@ void garantirWiFiConectado()
 {
   if(WiFi.status() != WL_CONNECTED)
   {
-    Serial.println("WiFi desconectado. Tentando reconectar...");
+    debugErro("WiFi desconectado. Tentando reconectar...");
     conectarWiFi();
   }
 
   if(WiFi.status() != WL_CONNECTED)
   {
-    Serial.println("Não foi possivel reconectar ao WiFi.");
+    debugErro("Não foi possivel reconectar ao WiFi.");
   }
 }
