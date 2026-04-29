@@ -19,4 +19,5 @@ typedef void (*CallbackMensagemMQTT)(const char* topico, const String& mensagem)
 
 void registrarCallbackMensagem(CallbackMensagemMQTT callback);
 
+ int obterTotalTopicosRecebimento();
 #endif
