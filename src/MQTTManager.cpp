@@ -1,13 +1,18 @@
 //!mqttManager.cpp
 
 #include <Arduino.h>
+
 #include "MQTTManager.h"
+
 #include <PubSubClient.h>
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
+
+//TODO: Talvez precise .cpp do secrets
 #include "secrets.h"
 #include "WiFiManager.h"
 #include "DebugManager.h"
+
 //===========Instancias==========
 WiFiClient wifiCliente;
 WiFiClientSecure wifiClienteSecure;
@@ -78,7 +83,7 @@ void callbackInternoMQTT(char* topico, byte* payload, unsigned int tamanho)
     }
 }
 
-void configurarMQTT()
+void configurarMQTT() //
 {
     debugInfo("=====================");
     debugInfo(" Configurando MQTT...");
@@ -109,9 +114,9 @@ void configurarMQTT()
     debugInfo("Callback interno do MQTT configurado");
 }
 
-void conectaMQTT()
+void conectarMQTT() //
 {
-    if(wifiEstaconectado())
+    if(wifiEstaConectado())
     {
         debugErro("MQTT não pode conectar porque o WiFi está desconectado.");
         return;
@@ -189,9 +194,9 @@ void conectaMQTT()
     }
 }
 
-void garantirMQTTconectado()
+void garantirMQTTConectado()//
 {
-    if(!wifiEstaconectado())
+    if(!wifiEstaConectado())
     {
         debugErro("MQTT não será reconectado porque o WiFi está desconectado.");
         return;
@@ -204,12 +209,12 @@ void garantirMQTTconectado()
     }
 }
 
-void loopMQTT()
+void loopMQTT()//
 {
     mqttClient.loop();
 }
 
-void publicarMensagem(const char* topico, const char* mensagem)
+void publicarMensagem(const char* topico, const char* mensagem)//
 {
     if(!mqttClient.connected())
     {
@@ -231,7 +236,7 @@ void publicarMensagem(const char* topico, const char* mensagem)
     }
 }
 
-void publicarMensagemNoTopico(int indiceTopico, const char* mensagem)
+void publicarMensagemNoTopico(int indiceTopico, const char* mensagem)//
 {
     const char* topico = obterTopicoPublicacao(indiceTopico);
 

@@ -4,6 +4,6 @@
 
 void conectarWiFi();
 void garantirWiFiConectado();
-bool wifiEstaconectado();
+bool wifiEstaConectado();
 
 #endif

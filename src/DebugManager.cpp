@@ -23,7 +23,7 @@ void debugErroSemLinha(const String& mensagem)
     }
 }
 
-void debuginfo(const String& mensagem)
+void debugInfo(const String& mensagem)
 {
     if(nivelDebugAtual >= DEBUG_TUDO)
     {
@@ -74,3 +74,7 @@ void configurarDebug()
     }
     debugInfo("=============");
 }
+
+
+
+//TODo: Criar a função obterNivelDebugAtual
