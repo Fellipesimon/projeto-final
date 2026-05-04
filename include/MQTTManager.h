@@ -15,7 +15,7 @@ void publicarMensagemNoTopico(int indiceTopico, const char* mensagem);//
 
 
 
-bool mqttEstaConectado();//
+bool mqttEstaConectado();
 
 const char* obterTopicoPublicacao(int indiceTopico);
 const char* obterTopicoRecebimento(int indiceTopico);

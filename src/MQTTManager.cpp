@@ -116,7 +116,7 @@ void configurarMQTT() //
 
 void conectarMQTT() //
 {
-    if(wifiEstaConectado())
+    if(!wifiEstaConectado())
     {
         debugErro("MQTT não pode conectar porque o WiFi está desconectado.");
         return;

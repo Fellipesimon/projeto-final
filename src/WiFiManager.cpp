@@ -37,12 +37,12 @@ const int maxTentativasWiFi = 30;
     tentativasWiFi++;
   }
 
-  debugInfo(".");
+  debugInfoSemLinha("\n\r");
   if(WiFi.status() == WL_CONNECTED)
   {
-    debugInfo("WiFi conectado comsucesso!");
-    debugInfo("Endereço IP: ");
-    debugInfo( String(WiFi.localIP()));
+    debugInfoSemLinha("WiFi conectado comsucesso!");
+    debugInfoSemLinha("[INFO] Endereço IP: ");
+    debugInfoSemLinha( WiFi.localIP().toString());
   }
 
   else
