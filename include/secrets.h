@@ -24,7 +24,7 @@ extern const char* MQTT_SENHA;
 
 extern const bool MQTT_USAR_TLS;   //modo de conexao sem segurança
 
-extern const char* MQTT_CERTIFICADO_CA;
+extern const char MQTT_CERTIFICADO_CA[];
 
 extern const char* TOPICOS_PUBLICAR[];
 extern

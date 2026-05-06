@@ -12,6 +12,7 @@ mqtt
 data:24/04/2026
 */
 
+const int PINO_LAMPADA = 8;
 const int PINO_LED_RGB = 48; // para o pino
 const int QUANTIDADE_LEDS = 1; //quantidade
 
@@ -108,7 +109,7 @@ void tratarJsonComando(const String &mensagem)
 
   if(erro)
   {
-  debugErro("Erro ao interpretat JSON.");
+  debugErro("Erro ao interpretar JSON.");
   debugErro(erro.c_str());
   return;
   }
@@ -133,3 +134,4 @@ void tratarJsonComando(const String &mensagem)
   }
 
 }
+
