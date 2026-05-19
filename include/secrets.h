@@ -52,6 +52,15 @@ extern const int DEBUG_NIVEL_INICIAL;
 // pino usado para forçar todas as mensagens na inicialização
 extern const int PINO_HABILITA_DEBUG_COMPLETO;
 
+extern const char* AWS_CERT_CA;
 
+extern const char* AWS_CERT_CRT;
 
+extern const char* AWS_CERT_PRIVATE;
+
+extern const char* AWS_IOT_ENDPOINT;
+
+extern const int AWS_IOT_PORT;
+
+extern const char* AWS_IOT_CLIENT_ID;
 #endif
