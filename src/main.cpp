@@ -12,6 +12,7 @@ void tratarMensagemRecebida(const char* topico, const String& mensagem);
 void configurarLedRGB();
 void alterarCorLedRGB(int vermelho, int verde, int azul);
 void tratarJsonComando(const String &mensagem);
+void enviarACK();
 
 const uint8_t ESP_ID = 1;
 
@@ -143,5 +144,26 @@ void tratarJsonComando(const String &mensagem)
     debugErro("Objeto ar-condicionado inválido.");
     return;
   }
+  enviarACK();
 }
 
+void enviarACK()
+{
+    JsonDocument resposta;
+
+    JsonObject ar =
+        resposta["ar-condicionado"].to<JsonObject>();
+
+    ar["codigo"] = 1000;
+
+    char buffer[64];
+
+    serializeJson(resposta, buffer);
+
+    publicarMensagem(
+        "senai134/fellipe/esp32/status",
+        buffer
+    );
+
+    debugInfo("Mensagem enviada ao grupo LCD com sucesso.");
+}

@@ -162,7 +162,7 @@ void conectarMQTT() //
 
     while(!mqttClient.connected() && tentativasMQTT < maxTentativasMQTT)// vai realizar a conexao ate conectar ou vai tentar 5 veses e depois vai parar
     {
-        debugInfo("Tentando conectar ao vroker MQTT. Tentativa: " + String(tentativasMQTT));
+        debugInfo("Tentando conectar ao broker MQTT. Tentativa: " + String(tentativasMQTT));
 
         bool conectado = false;
 
