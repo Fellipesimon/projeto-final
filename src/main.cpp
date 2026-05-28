@@ -9,8 +9,6 @@
 const char TOPICO_COMANDO[] = "senai134/fellipe/esp32/comando";
 
 void tratarMensagemRecebida(const char* topico, const String& mensagem);
-void configurarLedRGB();
-void alterarCorLedRGB(int vermelho, int verde, int azul);
 void tratarJsonComando(const String &mensagem);
 void enviarACK();
 
