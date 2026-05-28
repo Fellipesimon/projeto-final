@@ -94,19 +94,21 @@ void tratarJsonComando(const String &mensagem)
         return;
     }
 
-    if(doc["estado"].is<uint8_t>())
+    if(ar["estado"].is<uint8_t>())
     {
       estado = ar["estado"].as<uint8_t>();
+      Serial.println(estado);
     }
     else
     {
-        debugErro("Estado inválido.");
-        return;
+      debugErro("Estado inválido.");
+      return;
     }
 
-    if(doc["temperatura"].is<uint8_t>())
+    if(ar["temperatura"].is<uint8_t>())
     {
       temperatura = ar["temperatura"].as<uint8_t>();
+      Serial.println(temperatura);
     }
     else
     {
@@ -114,9 +116,10 @@ void tratarJsonComando(const String &mensagem)
       return;
     }
 
-    if(doc["modo"].is<uint8_t>())
+    if(ar["modo"].is<uint8_t>())
     {
       modo = ar["modo"].as<uint8_t>();
+      Serial.println(modo);
     }
     else
     {
@@ -124,9 +127,10 @@ void tratarJsonComando(const String &mensagem)
       return;
     }
 
-    if(doc["vento"].is<uint8_t>())
+    if(ar["vento"].is<uint8_t>())
     {
       vento = ar["vento"].as<uint8_t>();
+      Serial.println(vento);
     }
     else
     {
@@ -140,3 +144,4 @@ void tratarJsonComando(const String &mensagem)
     return;
   }
 }
+
