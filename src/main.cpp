@@ -1,41 +1,28 @@
-
 #include <Arduino.h>
+
 #include "WiFiManager.h"
-#include "MQTTManager.h"
+#include "MqttManager.h"
 #include "DebugManager.h"
 
 #include <ArduinoJson.h>
-#include <Adafruit_NeoPixel.h>
-/*
-autor:fellipe augusto
-mqtt
-data:24/04/2026
-*/
-
-const int PINO_LAMPADA = 8;
-const int PINO_LED_RGB = 48; // para o pino
-const int QUANTIDADE_LEDS = 1; //quantidade
 
 const char TOPICO_COMANDO[] = "senai134/fellipe/esp32/comando";
 
-Adafruit_NeoPixel ledRGB(
-  QUANTIDADE_LEDS,
-  PINO_LED_RGB,
-  NEO_GRB + NEO_KHZ800 
-);
-
+void tratarMensagemRecebida(const char* topico, const String& mensagem);
 void configurarLedRGB();
 void alterarCorLedRGB(int vermelho, int verde, int azul);
 void tratarJsonComando(const String &mensagem);
 
-void tratarMensagemRecebida(const char* topico, const String& mensagem);
+const uint8_t ESP_ID = 1;
 
+uint8_t estado;
+uint8_t temperatura;
+uint8_t modo;
+uint8_t vento;
 
 void setup() 
 {
   configurarDebug();
-
-  configurarLedRGB();//explicar na proxima aula
 
   conectarWiFi();
   configurarMQTT();
@@ -43,7 +30,7 @@ void setup()
   conectarMQTT();
 }
 
-void loop()
+void loop() 
 {
   garantirWiFiConectado();
   garantirMQTTConectado();
@@ -55,7 +42,7 @@ void tratarMensagemRecebida(const char* topico, const String& mensagem)
   debugInfo("==============================");
   debugInfo("Mensagem recebida na aplicação");
   debugInfo("==============================");
-
+  
   if(topico == nullptr)
   {
     debugErro("Tópico MQTT inválido");
@@ -75,32 +62,6 @@ void tratarMensagemRecebida(const char* topico, const String& mensagem)
 
 }
 
-
-void configurarLedRGB()
-{
-  ledRGB.begin();
-  ledRGB.setBrightness(80); //colocamos a qntd de brilho 0 a 255
-  ledRGB.clear();
-  ledRGB.show();
-
-  debugInfo("LED RGB configurado no GPIO" + String(PINO_LED_RGB));
-}
-
-void alterarCorLedRGB(int vermelho, int verde, int azul)
-{
- vermelho = constrain(vermelho, 0, 255);
- verde = constrain(verde, 0, 255);
- azul = constrain(azul, 0, 255);
-
-  ledRGB.setPixelColor(0, ledRGB.Color(vermelho, verde, azul));
-  ledRGB.show();
-
-  debugInfo("Cor aplicada no LED RGB");
-  debugInfo("R:" + String(vermelho));
-  debugInfo("G:" + String(verde));
-  debugInfo("B:" + String(azul));
-}
-
 void tratarJsonComando(const String &mensagem)
 {
   JsonDocument doc;
@@ -109,29 +70,73 @@ void tratarJsonComando(const String &mensagem)
 
   if(erro)
   {
-  debugErro("Erro ao interpretar JSON.");
-  debugErro(erro.c_str());
-  return;
+    debugErro("Erro ao interpretar JSON.");
+    debugErro(erro.c_str());
+    return;
   }
 
-  if(doc["led"].is<JsonObject>())
+  if(doc["ar-condicionado"].is<JsonObject>())
   {
-    if(!doc["led"]["r"].is<int>() ||
-     !doc["led"]["g"].is<int>() ||
-      !doc["led"]["b"].is<int>())
+    JsonObject ar = doc["ar-condicionado"];
+
+    if(ar["esp"].is<uint8_t>())
     {
-      debugErro("JSON INVALIDO. use led.r, led.g, led.b");
-      return;
+        uint8_t esp = ar["esp"].as<uint8_t>();
+
+        if(esp != 0 && esp != ESP_ID)
+        {
+            return;
+        }
     }
     else
     {
-      int vermelho = doc["led"]["r"].as<int>();
-      int verde = doc["led"]["g"].as<int>();
-      int azul = doc["led"]["b"].as<int>();
-      
-      alterarCorLedRGB(vermelho, verde, azul);
+        debugErro("ESP inválido.");
+        return;
+    }
+
+    if(doc["estado"].is<uint8_t>())
+    {
+      estado = ar["estado"].as<uint8_t>();
+    }
+    else
+    {
+        debugErro("Estado inválido.");
+        return;
+    }
+
+    if(doc["temperatura"].is<uint8_t>())
+    {
+      temperatura = ar["temperatura"].as<uint8_t>();
+    }
+    else
+    {
+      debugErro("Temperatura inválida.");
+      return;
+    }
+
+    if(doc["modo"].is<uint8_t>())
+    {
+      modo = ar["modo"].as<uint8_t>();
+    }
+    else
+    {
+      debugErro("modo inválido.");
+      return;
+    }
+
+    if(doc["vento"].is<uint8_t>())
+    {
+      vento = ar["vento"].as<uint8_t>();
+    }
+    else
+    {
+      debugErro("vento inválido.");
+      return;
     }
   }
-
+  else
+  {
+    debugErro("Objeto ar-condicionado inválido.");
+    return;
+  }
 }
-
