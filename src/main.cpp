@@ -11,6 +11,7 @@ const char TOPICO_COMANDO[] = "senai134/fellipe/esp32/comando";
 void tratarMensagemRecebida(const char* topico, const String& mensagem);
 void tratarJsonComando(const String &mensagem);
 void enviarACK();
+void controlarAr();
 
 const uint8_t ESP_ID = 1;
 
@@ -96,6 +97,8 @@ void tratarJsonComando(const String &mensagem)
     if(ar["estado"].is<uint8_t>())
     {
       estado = ar["estado"].as<uint8_t>();
+
+      debugInfoSemLinha("Estado: ");
       Serial.println(estado);
     }
     else
@@ -107,6 +110,8 @@ void tratarJsonComando(const String &mensagem)
     if(ar["temperatura"].is<uint8_t>())
     {
       temperatura = ar["temperatura"].as<uint8_t>();
+
+      debugInfoSemLinha("Temperatura: ");
       Serial.println(temperatura);
     }
     else
@@ -118,6 +123,8 @@ void tratarJsonComando(const String &mensagem)
     if(ar["modo"].is<uint8_t>())
     {
       modo = ar["modo"].as<uint8_t>();
+
+      debugInfoSemLinha("Modo: ");
       Serial.println(modo);
     }
     else
@@ -129,6 +136,8 @@ void tratarJsonComando(const String &mensagem)
     if(ar["vento"].is<uint8_t>())
     {
       vento = ar["vento"].as<uint8_t>();
+
+      debugInfoSemLinha("Vento: ");
       Serial.println(vento);
     }
     else
@@ -143,6 +152,7 @@ void tratarJsonComando(const String &mensagem)
     return;
   }
   enviarACK();
+  controlarAr();
 }
 
 void enviarACK()
@@ -164,4 +174,79 @@ void enviarACK()
     );
 
     debugInfo("Mensagem enviada ao grupo LCD com sucesso.");
+}
+
+void controlarAr()
+{
+    // LIGA / DESLIGA
+    if(estado == 1)
+    {
+        debugInfo("Ar ligado");
+    }
+    else
+    {
+        debugInfo("Ar desligado");
+    }
+
+    // TEMPERATURA
+    // Limites comuns do Fujitsu: 16°C até 30°C
+
+    if(temperatura < 18)
+        temperatura = 18;
+
+    if(temperatura > 30)
+        temperatura = 30;
+
+
+    debugInfoSemLinha("Temperatura: ");
+    Serial.println(temperatura);
+
+    switch(modo)
+    {
+        case 0:
+            debugInfo("Modo FRIO");
+            break;
+
+        case 1:
+            debugInfo("Modo DRY");
+            break;
+
+        case 2:
+            debugInfo("Modo VENTILAR");
+            break;
+
+        case 3:
+            debugInfo("Modo AQUECER");
+            break;
+
+        default:
+            break;
+    }
+
+    switch(vento)
+    {
+        case 0:
+            debugInfo("Fan AUTO");
+            break;
+
+        case 1:
+            debugInfo("Fan QUIET");
+            break;
+
+        case 2:
+            debugInfo("Fan LOW");
+            break;
+
+        case 3:
+            debugInfo("Fan MED");
+            break;
+
+        case 4:
+            debugInfo("Fan HIGH");
+            break;
+
+        default:
+            break;
+    }
+    debugInfo("Comando enviado ao ar-condicionado");
 }
